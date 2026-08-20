@@ -12,9 +12,19 @@ app.use(express.static(path.join(__dirname)));
 
 app.post('/api/chat', async (req, res) => {
     try {
-        const { message } = req.body;
+        const { messageHistory } = req.body;
+        
+        const formattedHistory = messageHistory.map(msg => ({
+            role: msg.role === 'assistant' ? 'model' : 'user',
+            parts: [{ text: msg.content }]
+        }));
+
+        const latestMessage = formattedHistory.pop();
+        
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const result = await model.generateContent(message);
+        const chat = model.startChat({ history: formattedHistory });
+        
+        const result = await chat.sendMessage(latestMessage.parts[0].text);
         res.json({ reply: result.response.text() });
     } catch (error) {
         console.error("Full AI Error:", error);
