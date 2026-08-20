@@ -31,7 +31,6 @@ app.post('/api/chat', async (req, res) => {
             },
             body: JSON.stringify({ contents })
         });
-
         const data = await apiResponse.json();
 
         if (!apiResponse.ok) {
