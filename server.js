@@ -1,11 +1,8 @@
 const express = require('express');
 const path = require('path');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -13,27 +10,38 @@ app.use(express.static(path.join(__dirname)));
 app.post('/api/chat', async (req, res) => {
     try {
         const { messageHistory } = req.body;
-        
-        if (!messageHistory || !Array.isArray(messageHistory)) {
-            return res.status(400).json({ error: "Invalid message history format" });
+        const apiKey = process.env.GEMINI_API_KEY;
+
+        if (!apiKey) {
+            return res.status(500).json({ error: "API key not configured on server" });
         }
 
-        const formattedHistory = messageHistory.map(msg => ({
+        const contents = messageHistory.map(msg => ({
             role: msg.role === 'assistant' ? 'model' : 'user',
             parts: [{ text: msg.content }]
         }));
 
-        const latestMessage = formattedHistory.pop();
-        
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const chat = model.startChat({ history: formattedHistory });
-        
-        const result = await chat.sendMessage(latestMessage.parts[0].text);
-        res.json({ reply: result.response.text() });
-        
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+        const apiResponse = await fetch(geminiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents })
+        });
+
+        const data = await apiResponse.json();
+
+        if (!apiResponse.ok) {
+            console.error("Google API Error Details:", data);
+            return res.status(500).json({ error: data.error?.message || "Gemini API rejected request" });
+        }
+
+        const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+        res.json({ reply: aiReply });
+
     } catch (error) {
-        console.error("Full AI Error Details:", error.message || error);
-        res.status(500).json({ error: error.message || "Could not connect to AI" });
+        console.error("Server Route Error:", error);
+        res.status(500).json({ error: "Could not connect to AI server" });
     }
 });
 
