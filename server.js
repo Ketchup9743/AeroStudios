@@ -21,11 +21,15 @@ app.post('/api/chat', async (req, res) => {
             parts: [{ text: msg.content }]
         }));
 
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        // New AQ keys require the endpoint without the key query param, using headers instead
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
 
         const apiResponse = await fetch(geminiUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-goog-api-key': apiKey
+            },
             body: JSON.stringify({ contents })
         });
 
