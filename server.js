@@ -1,11 +1,11 @@
 const express = require('express');
 const path = require('path');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenAI({});
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
@@ -14,10 +14,12 @@ app.post('/api/chat', async (req, res) => {
     try {
         const { message } = req.body;
         
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const result = await model.generateContent(message);
-        res.json({ reply: result.response.text() });
-        
+        const response = await ai.models.generateContent({
+            model: 'gemini-2.5-flash',
+            contents: message,
+        });
+
+        res.json({ reply: response.text });
     } catch (error) {
         console.error("Full AI Error:", error);
         res.status(500).json({ error: "Could not connect to AI" });
