@@ -14,6 +14,10 @@ app.post('/api/chat', async (req, res) => {
     try {
         const { messageHistory } = req.body;
         
+        if (!messageHistory || !Array.isArray(messageHistory)) {
+            return res.status(400).json({ error: "Invalid message history format" });
+        }
+
         const formattedHistory = messageHistory.map(msg => ({
             role: msg.role === 'assistant' ? 'model' : 'user',
             parts: [{ text: msg.content }]
@@ -26,9 +30,10 @@ app.post('/api/chat', async (req, res) => {
         
         const result = await chat.sendMessage(latestMessage.parts[0].text);
         res.json({ reply: result.response.text() });
+        
     } catch (error) {
-        console.error("Full AI Error:", error);
-        res.status(500).json({ error: "Could not connect to AI" });
+        console.error("Full AI Error Details:", error.message || error);
+        res.status(500).json({ error: error.message || "Could not connect to AI" });
     }
 });
 
