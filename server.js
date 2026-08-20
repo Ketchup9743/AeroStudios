@@ -21,8 +21,7 @@ app.post('/api/chat', async (req, res) => {
             parts: [{ text: msg.content }]
         }));
 
-        // New AQ keys require the endpoint without the key query param, using headers instead
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`;
 
         const apiResponse = await fetch(geminiUrl, {
             method: 'POST',
