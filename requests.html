@@ -3,77 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Requests - Aero Studios</title>
+  <title>Aero Studios - Requests</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <nav class="nav-links">
-    <a href="index.html" class="nav-btn">Home</a>
-    <a href="requests.html" class="nav-btn">Requests</a>
-  </nav>
+  <header class="top-bar">
+    <div class="logo-container">
+      <span class="logo-text">Aero AI</span>
+    </div>
+    <nav class="nav-links">
+      <a href="/" class="nav-btn">Home</a>
+      <a href="/requests" class="nav-btn">Requests</a>
+      <a href="#" class="nav-btn">Support</a>
+    </nav>
+  </header>
 
   <div class="requests-container">
     <div class="requests-header">
-      <h1>Submit a Project Request</h1>
-      <p style="color: #444746; font-size: 0.95rem;">Fill out the details below and it will be sent directly to our team via Discord.</p>
+      <h1>Project Requests</h1>
+      <p>Submit your ideas and features directly to our system.</p>
     </div>
 
     <div class="request-form-card">
-      <div class="form-group">
-        <label style="font-weight: 500; font-size: 0.9rem; color: #1f1f1f;">Discord Username</label>
-        <input type="text" id="discordUser" placeholder="e.g. username#0000">
-      </div>
-      <div class="form-group">
-        <label style="font-weight: 500; font-size: 0.9rem; color: #1f1f1f;">Email Address</label>
-        <input type="email" id="email" placeholder="you@example.com">
-      </div>
-      <div class="form-group">
-        <label style="font-weight: 500; font-size: 0.9rem; color: #1f1f1f;">Project Title</label>
-        <input type="text" id="projectTitle" placeholder="Name of your project">
-      </div>
-      <div class="form-group">
-        <label style="font-weight: 500; font-size: 0.9rem; color: #1f1f1f;">Description</label>
-        <textarea id="description" rows="4" placeholder="Describe what you want built..."></textarea>
-      </div>
-      <button class="submit-request-btn" id="submitBtn">Send Request</button>
+      <form action="/api/request" method="POST">
+        <div class="form-group">
+          <label for="projectName">Project Name</label>
+          <input type="text" id="projectName" name="projectName" required placeholder="Enter project name">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4" required placeholder="Describe what you need..."></textarea>
+        </div>
+        <button type="submit" class="submit-request-btn">Submit Request</button>
+      </form>
     </div>
   </div>
-
-  <script>
-    document.getElementById('submitBtn').addEventListener('click', async () => {
-      const discordUser = document.getElementById('discordUser').value;
-      const email = document.getElementById('email').value;
-      const projectTitle = document.getElementById('projectTitle').value;
-      const description = document.getElementById('description').value;
-
-      if (!discordUser || !projectTitle || !description) {
-        alert('Please fill out all required fields.');
-        return;
-      }
-
-      try {
-        const response = await fetch('/api/request', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ discordUser, email, projectTitle, description })
-        });
-
-        if (response.ok) {
-          alert('Request sent successfully!');
-          document.getElementById('discordUser').value = '';
-          document.getElementById('email').value = '';
-          document.getElementById('projectTitle').value = '';
-          document.getElementById('description').value = '';
-        } else {
-          alert('Failed to send request. Try again later.');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('An error occurred.');
-      }
-    });
-  </script>
 
 </body>
 </html>

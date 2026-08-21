@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <header class="top-bar">
     <div class="logo-container">
       <span class="logo-text">Aero AI</span>
@@ -15,10 +14,9 @@
     <nav class="nav-links">
       <a href="/" class="nav-btn">Home</a>
       <a href="/requests" class="nav-btn">Requests</a>
+      <a href="#" class="nav-btn">Support</a>
     </nav>
   </header>
-
-  <!-- Main container that starts centered and snaps to bottom when messages exist -->
   <div class="chat-wrapper" id="chatWrapper">
     <div class="chat-container" id="chatContainer">
       <div class="welcome-banner" id="welcomeBanner">
@@ -29,6 +27,7 @@
       </div>
     </div>
   </div>
+
 
   <div class="input-container">
     <button class="upload-btn" title="Upload Image">
@@ -50,11 +49,10 @@
     const sendBtn = document.getElementById('sendBtn');
 
     function addMessage(text, isUser = false) {
-      // Hide the welcome banner once typing starts
       if (welcomeBanner) {
         welcomeBanner.style.display = 'none';
       }
-      chatWrapper.classList.add('active'); // Snaps layout to bottom behavior
+      chatWrapper.classList.add('active');
 
       const msgDiv = document.createElement('div');
       msgDiv.classList.add('message');
@@ -70,7 +68,6 @@
       addMessage(text, true);
       chatInput.value = '';
 
-      // Simulated AI response
       setTimeout(() => {
         addMessage("I'm processing your request for Aero Studios!");
       }, 600);

@@ -59,7 +59,7 @@ body {
   background-color: #f0f4f9;
 }
 
-/* Chat starts centered in the middle of the screen */
+
 .chat-wrapper {
   flex: 1;
   display: flex;
@@ -70,7 +70,6 @@ body {
   transition: justify-content 0.3s ease;
 }
 
-/* When active (messages sent), it snaps layout to top/scrollable */
 .chat-wrapper.active {
   justify-content: flex-start;
 }
@@ -178,7 +177,6 @@ body {
   background-color: #084298;
 }
 
-/* Requests page styles matching the exact same look */
 .requests-container {
   max-width: 800px;
   width: 100%;
