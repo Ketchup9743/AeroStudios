@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aero Studios</title>
+  <title>Aero Studios - AI</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="top-bar">
     <div class="logo-container">
-      <span class="logo-text">Aero Studios</span>
+      <span class="logo-text">Aero AI</span>
     </div>
     <nav class="nav-links">
       <a href="/" class="nav-btn">Home</a>
@@ -18,9 +18,15 @@
     </nav>
   </header>
 
-  <div class="chat-container">
-    <div class="message ai-message">
-      Hello! Welcome to Aero Studios. How can I help you build your project today?
+  <!-- Main container that starts centered and snaps to bottom when messages exist -->
+  <div class="chat-wrapper" id="chatWrapper">
+    <div class="chat-container" id="chatContainer">
+      <div class="welcome-banner" id="welcomeBanner">
+        <h1>What can I help you build?</h1>
+      </div>
+      <div class="message ai-message">
+        Hello! Welcome to Aero Studios. How can I help you today?
+      </div>
     </div>
   </div>
 
@@ -32,9 +38,48 @@
         <line x1="12" y1="3" x2="12" y2="15"></line>
       </svg>
     </button>
-    <input type="text" class="chat-input" placeholder="Ask anything...">
-    <button class="send-btn">Send</button>
+    <input type="text" class="chat-input" id="chatInput" placeholder="Ask Aero AI...">
+    <button class="send-btn" id="sendBtn">Send</button>
   </div>
+
+  <script>
+    const chatWrapper = document.getElementById('chatWrapper');
+    const chatContainer = document.getElementById('chatContainer');
+    const welcomeBanner = document.getElementById('welcomeBanner');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function addMessage(text, isUser = false) {
+      // Hide the welcome banner once typing starts
+      if (welcomeBanner) {
+        welcomeBanner.style.display = 'none';
+      }
+      chatWrapper.classList.add('active'); // Snaps layout to bottom behavior
+
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message');
+      msgDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+      msgDiv.textContent = text;
+      chatContainer.appendChild(msgDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    sendBtn.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      addMessage(text, true);
+      chatInput.value = '';
+
+      // Simulated AI response
+      setTimeout(() => {
+        addMessage("I'm processing your request for Aero Studios!");
+      }, 600);
+    });
+
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendBtn.click();
+    });
+  </script>
 
 </body>
 </html>
