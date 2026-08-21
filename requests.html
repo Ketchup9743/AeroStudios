@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aero Studios - Submit Request</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 2L11 13" />
+          <path d="M22 2L15 22L11 13L2 9L22 2Z" />
+        </svg>
+      </div>
+      <span class="brand-name">Aero AI</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-btn">Home</a>
+      <a href="requests.html" class="nav-btn active">Requests</a>
+    </nav>
+  </header>
+
+  <main class="requests-container">
+    <div class="requests-header">
+      <h1>Submit a Custom Request</h1>
+      <p>Fill out the details below and our team will review your project request via Discord.</p>
+    </div>
+
+    <div class="request-form-card">
+      <form id="requestForm">
+        <div class="form-group">
+          <label for="discordUser">Discord Username</label>
+          <input type="text" id="discordUser" required placeholder="e.g., username#0000 or handle" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="e.g., you@example.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="projectTitle">What do you want made?</label>
+          <input type="text" id="projectTitle" required placeholder="e.g., Custom Bot, Website, Script..." />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Brief Description</label>
+          <textarea id="description" rows="4" required placeholder="Describe what you need in detail..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-request-btn" id="submitBtn">Submit Request</button>
+      </form>
+      <div id="formStatus" class="form-status" style="display: none;"></div>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('requestForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const formStatus = document.getElementById('formStatus');
+      
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      
+      const formData = {
+        discordUser: document.getElementById('discordUser').value,
+        email: document.getElementById('email').value,
+        projectTitle: document.getElementById('projectTitle').value,
+        description: document.getElementById('description').value
+      };
+
+      try {
+        const response = await fetch('/api/request', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          formStatus.style.display = 'block';
+          formStatus.style.color = '#059669';
+          formStatus.textContent = 'Success! Your request has been sent to our team.';
+          document.getElementById('requestForm').reset();
+        } else {
+          throw new Error('Failed to send request');
+        }
+      } catch (err) {
+        formStatus.style.display = 'block';
+        formStatus.style.color = '#dc2626';
+        formStatus.textContent = 'Error sending request. Please try again later.';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Request';
+      }
+    });
+  </script>
+</body>
+</html>
+ 

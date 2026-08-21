@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -7,46 +8,47 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-app.post('/api/chat', async (req, res) => {
-    try {
-        const { messageHistory } = req.body;
-        const apiKey = process.env.GEMINI_API_KEY;
+// Request submission endpoint that forwards to Discord Webhook
+app.post('/api/request', async (req, res) => {
+  const { discordUser, email, projectTitle, description } = req.body;
+  
+  if (!process.env.DISCORD_WEBHOOK_URL) {
+    return res.status(500).json({ error: 'Webhook URL not configured' });
+  }
 
-        if (!apiKey) {
-            return res.status(500).json({ error: "API key not configured on server" });
-        }
+  try {
+    const discordPayload = {
+      content: `🔔 **New Project Request Received!**`,
+      embeds: [{
+        title: projectTitle,
+        color: 3092790, // Blue accent
+        fields: [
+          { name: 'Discord User', value: discordUser, inline: true },
+          { name: 'Email', value: email, inline: true },
+          { name: 'Description', value: description, inline: false }
+        ],
+        timestamp: new Date().toISOString()
+      }]
+    };
 
-        const contents = messageHistory.map(msg => ({
-            role: msg.role === 'assistant' ? 'model' : 'user',
-            parts: [{ text: msg.content }]
-        }));
+    const fetch = (await import('node-fetch')).default;
+    const discordRes = await fetch(process.env.DISCORD_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(discordPayload)
+    });
 
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent`;
-
-        const apiResponse = await fetch(geminiUrl, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'x-goog-api-key': apiKey
-            },
-            body: JSON.stringify({ contents })
-        });
-        const data = await apiResponse.json();
-
-        if (!apiResponse.ok) {
-            console.error("Google API Error Details:", data);
-            return res.status(500).json({ error: data.error?.message || "Gemini API rejected request" });
-        }
-
-        const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
-        res.json({ reply: aiReply });
-
-    } catch (error) {
-        console.error("Server Route Error:", error);
-        res.status(500).json({ error: "Could not connect to AI server" });
+    if (discordRes.ok) {
+      res.status(200).json({ success: true });
+    } else {
+      res.status(500).json({ error: 'Failed to post to Discord' });
     }
+  } catch (error) {
+    console.error('Error forwarding request:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
