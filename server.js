@@ -8,7 +8,14 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-// Request submission endpoint using native Node.js fetch
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/requests.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'requests.html'));
+});
+
 app.post('/api/request', async (req, res) => {
   const { discordUser, email, projectTitle, description } = req.body;
   
@@ -21,7 +28,7 @@ app.post('/api/request', async (req, res) => {
       content: `🔔 **New Project Request Received!**`,
       embeds: [{
         title: projectTitle,
-        color: 3092790, // Blue accent
+        color: 3092790,
         fields: [
           { name: 'Discord User', value: discordUser, inline: true },
           { name: 'Email', value: email, inline: true },
