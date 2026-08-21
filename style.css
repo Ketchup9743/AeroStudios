@@ -13,8 +13,7 @@ body {
   height: 100vh;
 }
 
-/* --- UNIFIED TOP NAVBAR (For both pages) --- */
-.nav-links {
+.top-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -22,9 +21,25 @@ body {
   background-color: #ffffff;
   padding: 16px 24px;
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid #e0e0e0;
   z-index: 1000;
+}
+
+.logo-text {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #1f1f1f;
+}
+
+.top-bar .nav-links {
+  position: static;
+  border: none;
+  padding: 0;
+  background: transparent;
+  display: flex;
+  gap: 12px;
 }
 
 .nav-btn {
@@ -41,7 +56,6 @@ body {
   background-color: #f0f4f9;
 }
 
-/* --- AI CHAT PAGE STYLES --- */
 .chat-container {
   flex: 1;
   overflow-y: auto;
@@ -125,7 +139,6 @@ body {
   font-weight: 600;
 }
 
-/* --- REQUESTS PAGE STYLES --- */
 .requests-container {
   max-width: 900px;
   width: 100%;
