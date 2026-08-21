@@ -1,50 +1,107 @@
-const conversationHistory = [
-  { role: 'assistant', content: 'Hello! How can I assist you with Aero Studios today?' }
-];
-document.getElementById('chatForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const input = document.getElementById('userInput');
-  const userMessage = input.value.trim();
-  if (!userMessage) return;
-  const chatMessages = document.getElementById('chatMessages');
-  appendMessage('You', userMessage, 'user-message');
-  input.value = '';
-  conversationHistory.push({ role: 'user', content: userMessage });
-  const typingIndicator = appendMessage('AI', 'Thinking...', 'ai-message thinking');
-  try {
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messageHistory: conversationHistory })
-    });
-    const data = await response.json();
-    if (data.reply) {
-      typingIndicator.querySelector('.message-content').innerText = data.reply;
-      conversationHistory.push({ role: 'assistant', content: data.reply });
-    } else {
-      throw new Error(data.error || 'Invalid response from server');
-    }
-  } catch (error) {
-    console.error(error);
-    typingIndicator.querySelector('.message-content').innerText = 
-      'Sorry, something went wrong connecting to the AI server.';
-  }
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+const chatMessages = document.getElementById('chatMessages');
+const chatForm = document.getElementById('chatForm');
+const userInput = document.getElementById('userInput');
+const chatContainer = document.querySelector('.chat-container');
+const uploadBtn = document.getElementById('uploadBtn');
+const imageInput = document.getElementById('imageInput');
+
+let messageHistory = [];
+
+uploadBtn.addEventListener('click', () => {
+    imageInput.click();
 });
-function appendMessage(sender, text, className) {
-  const chatMessages = document.getElementById('chatMessages');
-  const msgElement = document.createElement('div');
-  msgElement.className = `message ${className}`;
-  msgElement.innerHTML = `
-    <div class="avatar">${sender}</div>
-    <div class="message-content">${escapeHTML(text)}</div>
-  `;
-  chatMessages.appendChild(msgElement);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-  return msgElement;
+
+imageInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        console.log('File selected:', file.name);
+        uploadBtn.style.color = 'var(--accent-blue)';
+    }
+});
+
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const message = userInput.value.trim();
+    if (!message) return;
+
+    userInput.value = '';
+    setFormState(false);
+
+    appendMessage('user', message);
+    messageHistory.push({ role: 'user', content: message });
+
+    // Instantly force the input bar to the bottom on the first message
+    if (!chatContainer.classList.contains('chat-started')) {
+        chatContainer.classList.add('chat-started');
+    }
+
+    const thinkingId = appendMessage('ai', 'Thinking...');
+
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messageHistory }),
+        });
+
+        const data = await response.json();
+
+        removeMessage(thinkingId);
+
+        if (!response.ok) throw new Error(data.error);
+
+        appendMessage('ai', data.reply);
+        messageHistory.push({ role: 'assistant', content: data.reply });
+
+    } catch (error) {
+        console.error('Error:', error);
+        removeMessage(thinkingId);
+        appendMessage('ai', `Sorry, I ran into an error: ${error.message}`);
+    } finally {
+        setFormState(true);
+        userInput.focus();
+    }
+});
+
+function appendMessage(role, text) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${role}-message`;
+    const messageId = Date.now();
+    messageDiv.dataset.id = messageId;
+
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = role === 'user' ? 'Y' : 'AI';
+
+    const content = document.createElement('div');
+    content.className = 'message-content';
+    content.textContent = text;
+
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(content);
+    chatMessages.appendChild(messageDiv);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    return messageId;
 }
-function escapeHTML(str) {
-  return str.replace(/[&<>'"]/g, 
-    tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-  );
+
+function removeMessage(id) {
+    const messageElement = document.querySelector(`[data-id="${id}"]`);
+    if (messageElement) {
+        chatMessages.removeChild(messageElement);
+    }
+}
+
+function setFormState(enabled) {
+    const sendBtn = chatForm.querySelector('button[type="submit"]');
+    
+    userInput.disabled = !enabled;
+    sendBtn.disabled = !enabled;
+    uploadBtn.disabled = !enabled;
+    
+    if (enabled) {
+        userInput.focus();
+    }
 }
