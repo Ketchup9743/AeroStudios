@@ -16,6 +16,10 @@ app.get('/requests.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'requests.html'));
 });
 
+app.get('/requests', (req, res) => {
+  res.sendFile(path.join(__dirname, 'requests.html'));
+});
+
 app.post('/api/request', async (req, res) => {
   const { discordUser, email, projectTitle, description } = req.body;
   
