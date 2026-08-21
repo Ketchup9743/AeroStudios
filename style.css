@@ -1,241 +1,40 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aero Studios</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-body {
-  background-color: #ffffff;
-  color: #1f1f1f;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
+  <header class="top-bar">
+    <div class="logo-container">
+      <span class="logo-text">Aero Studios</span>
+    </div>
+    <nav class="nav-links">
+      <a href="/" class="nav-btn">Home</a>
+      <a href="/requests" class="nav-btn">Requests</a>
+    </nav>
+  </header>
 
-.top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  z-index: 1000;
-}
+  <div class="chat-container">
+    <div class="message ai-message">
+      Hello! Welcome to Aero Studios. How can I help you build your project today?
+    </div>
+  </div>
 
-.logo-text {
-  font-weight: 600;
-  font-size: 1.2rem;
-  color: #1f1f1f;
-}
+  <div class="input-container">
+    <button class="upload-btn" title="Upload Image">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="17 8 12 3 7 8"></polyline>
+        <line x1="12" y1="3" x2="12" y2="15"></line>
+      </svg>
+    </button>
+    <input type="text" class="chat-input" placeholder="Ask anything...">
+    <button class="send-btn">Send</button>
+  </div>
 
-.top-bar .nav-links {
-  display: flex;
-  gap: 12px;
-}
-
-.nav-btn {
-  text-decoration: none;
-  color: #444746;
-  font-weight: 500;
-  font-size: 0.95rem;
-  padding: 8px 14px;
-  border-radius: 8px;
-  transition: background-color 0.2s;
-}
-
-.nav-btn:hover {
-  background-color: #f0f4f9;
-  color: #1f1f1f;
-}
-
-.chat-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 100px 24px 120px 24px; 
-  max-width: 800px;
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.welcome-section {
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.welcome-title {
-  font-size: 2.2rem;
-  font-weight: 500;
-  color: #1f1f1f;
-  margin-bottom: 4px;
-}
-
-.welcome-subtitle {
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: #c4c7c5;
-}
-
-.message {
-  max-width: 85%;
-  padding: 16px 20px;
-  border-radius: 18px;
-  line-height: 1.5;
-  font-size: 1rem;
-}
-
-.user-message {
-  align-self: flex-end;
-  background-color: #f0f4f9;
-  color: #1f1f1f;
-  border-bottom-right-radius: 4px;
-}
-
-.ai-message {
-  align-self: flex-start;
-  background-color: #f0f4f9;
-  color: #1f1f1f;
-  border: 1px solid #e0e0e0;
-  border-bottom-left-radius: 4px;
-}
-
-.input-container {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 750px;
-  background-color: #f0f4f9;
-  border: 1px solid #e0e0e0;
-  border-radius: 32px;
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  z-index: 1000;
-}
-
-.upload-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  color: #444746;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.upload-btn:hover {
-  background-color: #e2e7ec;
-}
-
-.chat-input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  padding: 10px 14px;
-  font-size: 1rem;
-  outline: none;
-  color: #1f1f1f;
-}
-
-.chat-input::placeholder {
-  color: #747775;
-}
-
-.send-btn {
-  background-color: #0b57d0;
-  color: white;
-  border: none;
-  cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
-}
-
-.send-btn:hover {
-  background-color: #084298;
-}
-
-.requests-container {
-  max-width: 800px;
-  width: 100%;
-  margin: 100px auto 40px auto;
-  padding: 24px;
-}
-
-.requests-header {
-  margin-bottom: 30px;
-}
-
-.requests-header h1 {
-  font-size: 2rem;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.request-form-card {
-  background-color: #f0f4f9;
-  border: 1px solid #e0e0e0;
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-}
-
-.form-group {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-weight: 500;
-  font-size: 0.95rem;
-  color: #444746;
-}
-
-.form-group input, 
-.form-group textarea {
-  padding: 14px 16px;
-  border: 1px solid #dadce0;
-  border-radius: 12px;
-  font-size: 1rem;
-  outline: none;
-  background-color: #ffffff;
-  color: #1f1f1f;
-}
-
-.form-group input:focus, 
-.form-group textarea:focus {
-  border-color: #0b57d0;
-}
-
-.submit-request-btn {
-  background-color: #0b57d0;
-  color: white;
-  border: none;
-  padding: 14px;
-  width: 100%;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.submit-request-btn:hover {
-  background-color: #084298;
-}
+</body>
+</html>
