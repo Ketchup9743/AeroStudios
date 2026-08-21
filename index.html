@@ -61,11 +61,38 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
+    function showTypingIndicator() {
+      if (welcomeBanner) welcomeBanner.style.display = 'none';
+      chatWrapper.classList.add('active');
+
+      const typingDiv = document.createElement('div');
+      typingDiv.classList.add('typing-indicator');
+      typingDiv.id = 'typingIndicator';
+      
+      typingDiv.innerHTML = `
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      `;
+      
+      chatContainer.appendChild(typingDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+      const typingDiv = document.getElementById('typingIndicator');
+      if (typingDiv) {
+        typingDiv.remove();
+      }
+    }
+
     sendBtn.addEventListener('click', async () => {
       const text = chatInput.value.trim();
       if (!text) return;
       addMessage(text, true);
       chatInput.value = '';
+
+      showTypingIndicator();
 
       try {
         const response = await fetch('/api/chat', {
@@ -75,8 +102,11 @@
         });
 
         const data = await response.json();
+        
+        removeTypingIndicator();
         addMessage(data.reply || data.response || "No response received.");
       } catch (error) {
+        removeTypingIndicator();
         addMessage("Error connecting to server.");
       }
     });
