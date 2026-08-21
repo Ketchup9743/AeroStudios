@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-// Request submission endpoint that forwards to Discord Webhook
+// Request submission endpoint using native Node.js fetch
 app.post('/api/request', async (req, res) => {
   const { discordUser, email, projectTitle, description } = req.body;
   
@@ -31,7 +31,6 @@ app.post('/api/request', async (req, res) => {
       }]
     };
 
-    const fetch = (await import('node-fetch')).default;
     const discordRes = await fetch(process.env.DISCORD_WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
