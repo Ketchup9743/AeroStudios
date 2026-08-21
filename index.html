@@ -28,7 +28,6 @@
     </div>
   </div>
 
-
   <div class="input-container">
     <button class="upload-btn" title="Upload Image">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -62,21 +61,29 @@
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    sendBtn.addEventListener('click', () => {
+    sendBtn.addEventListener('click', async () => {
       const text = chatInput.value.trim();
       if (!text) return;
       addMessage(text, true);
       chatInput.value = '';
 
-      setTimeout(() => {
-        addMessage("I'm processing your request for Aero Studios!");
-      }, 600);
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+
+        const data = await response.json();
+        addMessage(data.reply || data.response || "No response received.");
+      } catch (error) {
+        addMessage("Error connecting to server.");
+      }
     });
 
     chatInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendBtn.click();
     });
   </script>
-
 </body>
 </html>
