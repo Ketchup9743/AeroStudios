@@ -119,8 +119,8 @@ body {
 }
 
 .input-container {
-  position: absolute;
-  bottom: 16px;
+  position: fixed;
+  bottom: 20px;
   left: 16px;
   right: 16px;
   max-width: 750px;
