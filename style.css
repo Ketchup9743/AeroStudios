@@ -10,8 +10,9 @@ body {
   color: #1f1f1f;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
+  position: relative;
 }
 
 .top-bar {
@@ -118,10 +119,10 @@ body {
 }
 
 .input-container {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
-  right: 24px;
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
   max-width: 750px;
   margin: 0 auto;
   background-color: #f0f4f9;
