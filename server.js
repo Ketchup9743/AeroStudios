@@ -20,6 +20,14 @@ app.get('/requests', (req, res) => {
   res.sendFile(path.join(__dirname, 'requests.html'));
 });
 
+app.get('/support.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'support.html'));
+});
+
+app.get('/support', (req, res) => {
+  res.sendFile(path.join(__dirname, 'support.html'));
+});
+
 app.post('/api/chat', async (req, res) => {
   const { message } = req.body;
 
