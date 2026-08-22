@@ -64,6 +64,9 @@ app.post('/api/request', async (req, res) => {
   try {
     const discordPayload = {
       content: `🔔 **New Project Request Received!** <@1537969782765133854>`,
+      allowed_mentions: {
+        users: ["1537969782765133854"]
+      },
       embeds: [{
         title: projectTitle,
         color: 3092790,
