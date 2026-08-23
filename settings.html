@@ -2,20 +2,6 @@
 <html lang="en">
 <head>
   <script>
-  const savedTheme = localStorage.getItem('aero_theme');
-  if (savedTheme) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = `themes/${savedTheme}.css`;
-    document.head.appendChild(link);
-  }
-</script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aero Studios - Settings</title>
-  <link rel="stylesheet" href="style.css">
-  <script>
     const savedTheme = localStorage.getItem('aero_theme');
     if (savedTheme) {
       const link = document.createElement('link');
@@ -24,6 +10,10 @@
       document.head.appendChild(link);
     }
   </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aero Studios - Settings</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     html, body {
       height: auto !important;
