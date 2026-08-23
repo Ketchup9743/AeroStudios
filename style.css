@@ -42,7 +42,7 @@ body {
 .logo-text {
   font-weight: 600;
   font-size: 1.2rem;
-  color: #0b57d0;
+  color: var(--theme-color, #0b57d0);
 }
 
 .top-bar .nav-links {
@@ -166,7 +166,7 @@ body {
 }
 
 .send-btn {
-  background-color: #0b57d0;
+  background-color: var(--theme-color, #0b57d0);
   color: white;
   border: none;
   cursor: pointer;
@@ -178,7 +178,7 @@ body {
 }
 
 .send-btn:hover {
-  background-color: #084298;
+  opacity: 0.9;
 }
 
 .requests-container {
@@ -196,6 +196,7 @@ body {
   font-size: 1.8rem;
   font-weight: 500;
   margin-bottom: 8px;
+  color: var(--theme-color, #0b57d0);
 }
 
 .request-form-card {
@@ -227,7 +228,7 @@ body {
 }
 
 .submit-request-btn {
-  background-color: #0b57d0;
+  background-color: var(--theme-color, #0b57d0);
   color: white;
   border: none;
   padding: 14px;
