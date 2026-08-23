@@ -17,6 +17,8 @@
             align-items: center;
             text-align: center;
             padding: 20px;
+            box-sizing: border-box;
+            position: relative;
         }
 
         h1 {
@@ -33,7 +35,7 @@
             margin: 0 0 24px 0;
         }
 
-        a {
+        a.home-btn {
             display: inline-block;
             background-color: #0066ff;
             color: #ffffff;
@@ -44,8 +46,18 @@
             transition: background-color 0.2s;
         }
 
-        a:hover {
+        a.home-btn:hover {
             background-color: #0052cc;
+        }
+
+        /* Style for the version tag at the bottom of the error page */
+        #version-container {
+            position: absolute;
+            bottom: 20px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            color: #888888;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -53,8 +65,11 @@
 
     <h1>Aero Studios</h1>
     <p>Page Not Found</p>
-    <a href="/">Go Back Home</a>
-<script src="version.js"></script>
+    <a href="/" class="home-btn">Go Back Home</a>
 
+    <!-- Version tag linking to your patch page -->
+    <a id="version-container" href="patch.html"></a>
+
+    <script src="version.js"></script>
 </body>
 </html>

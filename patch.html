@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patch Notes - Aero Studios</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            color: #111111;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 100px auto 40px auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin: 0 0 20px 0;
+        }
+
+        .patch-card {
+            background: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .patch-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 1.2rem;
+            color: #0b57d0;
+        }
+
+        .patch-card ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #444746;
+            line-height: 1.5;
+        }
+
+        .patch-card li {
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="logo-container">
+      <span class="logo-text">Aero AI</span>
+      <a id="version-container" href="patch.html" style="text-decoration: none; font-size: 0.85rem; color: #888888; margin-left: 10px; cursor: pointer;"></a>
+    </div>
+    <nav class="nav-links">
+      <a href="/" class="nav-btn">Home</a>
+      <a href="/requests" class="nav-btn">Requests</a>
+      <a href="/support" class="nav-btn">Support</a>
+    </nav>
+  </header>
+
+    <div class="container">
+        <h1>Patch Notes</h1>
+        
+        <div id="patch-container">
+            <p>Loading patch notes...</p>
+        </div>
+    </div>
+
+    <script>
+        fetch('version.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('patch-container');
+                container.innerHTML = '';
+
+                if (data.patches && data.patches.length > 0) {
+                    data.patches.forEach(patch => {
+                        const card = document.createElement('div');
+                        card.classList.add('patch-card');
+
+                        let changesList = '';
+                        patch.changes.forEach(change => {
+                            changesList += `<li>${change}</li>`;
+                        });
+
+                        card.innerHTML = `
+                            <h3>AeroStudios - v${patch.version}</h3>
+                            <ul>${changesList}</ul>
+                        `;
+
+                        container.appendChild(card);
+                    });
+                } else {
+                    container.innerHTML = '<p>No patch notes available yet.</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading patch notes:', error);
+                document.getElementById('patch-container').innerHTML = '<p>Failed to load patch notes.</p>';
+            });
+    </script>
+    <script src="version.js"></script>
+</body>
+</html>

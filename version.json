@@ -1,3 +1,16 @@
 {
-    "version": "1.1.1"
+  "version": "1.2.0",
+  "patches": [
+    {
+      "version": "1.2.0",
+      "changes": [
+        "Added patch notes page",
+        "Moved to Cloudflare",
+        "New domain",
+        "Fixed the AI",
+        "Fixed requests",
+        "Finished support"
+      ]
+    }
+  ]
 }
