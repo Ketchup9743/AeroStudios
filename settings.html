@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+  const savedTheme = localStorage.getItem('aero_theme');
+  if (savedTheme) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `themes/${savedTheme}.css`;
+    document.head.appendChild(link);
+  }
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aero Studios - Settings</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const savedTheme = localStorage.getItem('aero_theme');
+    if (savedTheme) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `themes/${savedTheme}.css`;
+      document.head.appendChild(link);
+    }
+  </script>
+  <style>
+    html, body {
+      height: auto !important;
+      min-height: 100vh !important;
+      overflow: auto !important;
+      position: static !important;
+    }
+    .settings-container {
+      margin-top: 100px !important;
+      margin-bottom: 60px !important;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+    }
+    .theme-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 14px;
+      border-radius: 10px;
+      border: 2px solid #dadce0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .theme-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+
+  <div class="settings-container">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <h1>Site Settings</h1>
+      <p>Customize your Aero Studios viewing experience.</p>
+    </div>
+
+    <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid #dadce0; margin-bottom: 24px;">
+      <h2 style="font-size: 1.3rem; margin-bottom: 12px; color: #0b57d0;">Choose Theme</h2>
+      <p style="margin-bottom: 16px; color: #444746; font-size: 0.95rem;">Select your preferred color scheme for the website.</p>
+      
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="theme-btn" onclick="setTheme('blue')" style="background: #ffffff; color: #0b57d0; border-color: #0b57d0;">Blue / White</button>
+        <button class="theme-btn" onclick="setTheme('green')" style="background: #ffffff; color: #137333; border-color: #137333;">Green / White</button>
+        <button class="theme-btn" onclick="setTheme('orange')" style="background: #ffffff; color: #e37400; border-color: #e37400;">Orange / White</button>
+        <button class="theme-btn" onclick="setTheme('magenta')" style="background: #1e1e1e; color: #ff007f; border-color: #ff007f;">Magenta / Black</button>
+      </div>
+    </div>
+
+    <div style="background: #ffffff; padding: 24px; border-radius: 12px; border: 1px solid #dadce0; text-align: center;">
+      <h2 style="font-size: 1.3rem; margin-bottom: 8px;">More Settings</h2>
+      <p style="color: #444746; font-size: 0.95rem; margin: 0;">More settings coming soon!</p>
+    </div>
+  </div>
+
+  <script>
+    fetch('navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('nav-placeholder').innerHTML = data;
+      });
+
+    function setTheme(themeName) {
+      localStorage.setItem('aero_theme', themeName);
+      location.reload();
+    }
+  </script>
+  <script src="version.js"></script>
+</body>
+</html>
