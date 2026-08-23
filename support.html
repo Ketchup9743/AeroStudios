@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aero Studios - Support</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
   <style>
     html, body {
       height: auto !important;
@@ -26,7 +27,6 @@
   <header class="top-bar">
     <div class="logo-container">
       <span class="logo-text">Aero AI</span>
-      <!-- Version tag placed right next to the title in the header -->
       <a id="version-container" href="patch.html" style="text-decoration: none; font-size: 0.85rem; color: #888888; margin-left: 10px; cursor: pointer;"></a>
     </div>
     <nav class="nav-links">
@@ -97,8 +97,19 @@
         <li style="margin-bottom: 0;">Only 1 request at a time.</li>
       </ul>
     </div>
+
+    <div class="powered-by-container" style="text-align: center; margin-top: 20px; padding: 20px;">
+      <p style="font-size: 0.9rem; color: #444746; margin-bottom: 12px; font-weight: 500;">Powered by:</p>
+      <div style="display: flex; justify-content: center; gap: 20px; align-items: center; font-size: 2rem;">
+        <i class="devicon-html5-plain" title="HTML5" style="color: #e34f26; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></i>
+        <i class="devicon-css3-plain" title="CSS3" style="color: #1572b6; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></i>
+        <i class="devicon-javascript-plain" title="JavaScript" style="color: #f7df1e; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></i>
+        <i class="devicon-json-plain" title="JSON" style="color: #444746; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></i>
+        <i class="devicon-markdown-original" title="Markdown" style="color: #444746; transition: transform 0.2s; cursor: pointer;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'"></i>
+      </div>
+    </div>
+
   </div>
   <script src="version.js"></script>
 </body>
 </html>
-
