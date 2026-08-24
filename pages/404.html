@@ -6,13 +6,14 @@
     if (savedTheme) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = `themes/${savedTheme}.css`;
+      link.href = `../themes/${savedTheme}.css`;
       document.head.appendChild(link);
     }
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Page Not Found - Aero Studios</title>
+  <link rel="stylesheet" href="../style.css">
   <style>
       body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -71,9 +72,9 @@
 
     <h1>Aero Studios</h1>
     <p>Page Not Found</p>
-    <a href="/" class="home-btn">Go Back Home</a>
-    <a id="version-container" href="patch.html"></a>
+    <a href="../index.html" class="home-btn">Go Back Home</a>
+    <a id="version-container" href="../patch.html"></a>
 
-    <script src="version.js"></script>
+    <script src="../version.js"></script>
 </body>
 </html>

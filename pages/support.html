@@ -6,14 +6,14 @@
     if (savedTheme) {
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = `themes/${savedTheme}.css`;
+      link.href = `../themes/${savedTheme}.css`;
       document.head.appendChild(link);
     }
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aero Studios - Support</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
   <style>
     html, body {
@@ -111,12 +111,12 @@
   </div>
 
   <script>
-    fetch('navbar.html')
+    fetch('../navbar.html')
       .then(response => response.text())
       .then(data => {
         document.getElementById('nav-placeholder').innerHTML = data;
       });
   </script>
-  <script src="version.js"></script>
+  <script src="../version.js"></script>
 </body>
 </html>
