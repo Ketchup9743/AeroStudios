@@ -51,16 +51,12 @@
   </div>
 
   <script>
-    fetch('components/navbar.html')
+    fetch('navbar.html')
       .then(response => response.text())
       .then(data => {
         document.getElementById('nav-placeholder').innerHTML = data;
       })
-      .catch(() => {
-        fetch('navbar.html').then(res => res.text()).then(data => {
-          document.getElementById('nav-placeholder').innerHTML = data;
-        }).catch(() => {});
-      });
+      .catch(error => console.error('Error loading navbar:', error));
 
     fetch('reviews.json')
       .then(response => response.json())
