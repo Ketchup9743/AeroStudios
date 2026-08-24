@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aero Studios - Client Reviews</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color, #ffffff);
+      color: var(--text-color, #202124);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+
+  <div style="max-width: 650px; margin: 40px auto; padding: 0 20px;">
+    <h1 style="text-align: center; margin-bottom: 8px;">Client Reviews & Proof</h1>
+    <p style="text-align: center; color: #5f6368; margin-top: 0; margin-bottom: 30px;">See what people are saying about working with Aero Studios.</p>
+    
+    <div id="reviews-container" style="display: flex; flex-direction: column; gap: 16px;">
+      <p style="text-align: center; color: #5f6368;">Loading reviews...</p>
+    </div>
+  </div>
+
+  <div id="image-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; cursor: pointer;" onclick="closeModal()">
+    <img id="modal-img" style="max-width: 90%; max-height: 90%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+  </div>
+
+  <script>
+    fetch('components/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('nav-placeholder').innerHTML = data;
+      });
+
+    fetch('reviews.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('reviews-container');
+        if (!data.reviews || data.reviews.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: #5f6368;">No reviews yet!</p>';
+          return;
+        }
+        
+        container.innerHTML = data.reviews.map(rev => `
+          <div style="background: var(--card-bg, #f8f9fa); border: 1px solid #dadce0; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <strong style="font-size: 1.05rem;">@${rev.client}</strong>
+              <span>${rev.rating}</span>
+            </div>
+            <p style="margin: 0 0 12px 0; color: #3c4043; line-height: 1.4;">"${rev.feedback}"</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e0e0e0; padding-top: 10px; margin-top: 10px;">
+              <small style="color: #5f6368; font-style: italic;">Project: ${rev.project}</small>
+              ${rev.image ? `<img src="${rev.image}" alt="Proof" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 1px solid #dadce0;" onclick="openModal('${rev.image}')" title="Click to zoom proof">` : ''}
+            </div>
+          </div>
+        `).join('');
+      })
+      .catch(error => {
+        console.error('Error loading reviews:', error);
+        document.getElementById('reviews-container').innerHTML = '<p style="text-align: center; color: #d93025;">Failed to load reviews.</p>';
+      });
+
+    function openModal(imgSrc) {
+      document.getElementById('modal-img').src = imgSrc;
+      document.getElementById('image-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('image-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
