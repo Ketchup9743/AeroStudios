@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    const savedTheme = localStorage.getItem('aero_theme');
+    if (savedTheme) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = `themes/${savedTheme}.css`;
+      document.head.appendChild(link);
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aero Studios - Client Reviews</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color, #ffffff);
-      color: var(--text-color, #202124);
+    html, body {
+      height: auto !important;
+      min-height: 100vh !important;
+      overflow: auto !important;
+      position: static !important;
+    }
+    .reviews-container {
+      margin-top: 100px !important;
+      margin-bottom: 60px !important;
+      max-width: 650px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 20px;
     }
   </style>
 </head>
@@ -18,11 +35,13 @@
 
   <div id="nav-placeholder"></div>
 
-  <div style="max-width: 650px; margin: 40px auto; padding: 0 20px;">
-    <h1 style="text-align: center; margin-bottom: 8px;">Service Reviews</h1>
-    <p style="text-align: center; color: #5f6368; margin-top: 0; margin-bottom: 30px;">See reviews of our work from past clients!</p>
+  <div class="reviews-container">
+    <div class="requests-header" style="text-align: center; margin-bottom: 30px;">
+      <h1>Service Reviews</h1>
+      <p>See reviews of our work from past clients!</p>
+    </div>
     
-    <div id="reviews-container" style="display: flex; flex-direction: column; gap: 16px;">
+    <div id="reviews-list" style="display: flex; flex-direction: column; gap: 16px;">
       <p style="text-align: center; color: #5f6368;">Loading reviews...</p>
     </div>
   </div>
@@ -37,12 +56,16 @@
       .then(data => {
         document.getElementById('nav-placeholder').innerHTML = data;
       })
-      .catch(() => {});
+      .catch(() => {
+        fetch('navbar.html').then(res => res.text()).then(data => {
+          document.getElementById('nav-placeholder').innerHTML = data;
+        }).catch(() => {});
+      });
 
     fetch('reviews.json')
       .then(response => response.json())
       .then(data => {
-        const container = document.getElementById('reviews-container');
+        const container = document.getElementById('reviews-list');
         if (!data.reviews || data.reviews.length === 0) {
           container.innerHTML = '<p style="text-align: center; color: #5f6368;">No reviews yet!</p>';
           return;
@@ -64,7 +87,7 @@
       })
       .catch(error => {
         console.error('Error loading reviews:', error);
-        document.getElementById('reviews-container').innerHTML = '<p style="text-align: center; color: #d93025;">Failed to load reviews.</p>';
+        document.getElementById('reviews-list').innerHTML = '<p style="text-align: center; color: #d93025;">Failed to load reviews.</p>';
       });
 
     function openModal(imgSrc) {
@@ -76,5 +99,6 @@
       document.getElementById('image-modal').style.display = 'none';
     }
   </script>
+  <script src="version.js"></script>
 </body>
 </html>
