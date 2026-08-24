@@ -36,7 +36,8 @@
       .then(response => response.text())
       .then(data => {
         document.getElementById('nav-placeholder').innerHTML = data;
-      });
+      })
+      .catch(() => {});
 
     fetch('reviews.json')
       .then(response => response.json())
