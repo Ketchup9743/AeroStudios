@@ -3,6 +3,15 @@ export async function onRequestPost(context) {
     const { request, env } = context;
     const { discordUser, email, projectTitle, promoCode, description } = await request.json();
     
+    const validPromoCodes = ["AERORELEASE", "AERO26"];
+
+    if (promoCode && promoCode.trim() !== "" && !validPromoCodes.includes(promoCode.trim())) {
+      return new Response(JSON.stringify({ error: 'Invalid promo code' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     if (!env.DISCORD_WEBHOOK_URL) {
       return new Response(JSON.stringify({ error: 'Webhook URL not configured' }), {
         status: 500,
@@ -21,7 +30,7 @@ export async function onRequestPost(context) {
         fields: [
           { name: 'Discord User', value: discordUser, inline: true },
           { name: 'Email', value: email, inline: true },
-          { name: 'Promo Code', value: promoCode || 'None provided', inline: true },
+          { name: 'Promo Code', value: promoCode && promoCode.trim() !== "" ? promoCode : 'None provided', inline: true },
           { name: 'Description', value: description, inline: false }
         ],
         timestamp: new Date().toISOString()
