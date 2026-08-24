@@ -1,7 +1,7 @@
 export async function onRequestPost(context) {
   try {
     const { request, env } = context;
-    const { discordUser, email, projectTitle, description } = await request.json();
+    const { discordUser, email, projectTitle, promoCode, description } = await request.json();
     
     if (!env.DISCORD_WEBHOOK_URL) {
       return new Response(JSON.stringify({ error: 'Webhook URL not configured' }), {
@@ -21,6 +21,7 @@ export async function onRequestPost(context) {
         fields: [
           { name: 'Discord User', value: discordUser, inline: true },
           { name: 'Email', value: email, inline: true },
+          { name: 'Promo Code', value: promoCode || 'None provided', inline: true },
           { name: 'Description', value: description, inline: false }
         ],
         timestamp: new Date().toISOString()
