@@ -10,30 +10,36 @@
   <div id="navbar-container"></div>
 
   <main style="max-width: 500px; text-align: left; margin: 4rem auto; padding: 0 1rem;">
-    <div style="background: var(--card-bg, #1e1e1e); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color, #333);">
-      <h2 style="margin-bottom: 1rem; color: var(--text-color, #fff);">Client Portal Access</h2>
+    <div style="background: #ffffff; padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color, #ccc); color: #000;">
+      <h2 style="margin-bottom: 1rem; color: #000;">Client Portal Access</h2>
       
       <div id="login-section">
-        <p style="color: var(--text-muted, #aaa); margin-bottom: 1.5rem;">Enter your access token to view your project dashboard.</p>
+        <p style="color: #555; margin-bottom: 1.5rem;">Enter your access token to view your project dashboard.</p>
         <form id="token-form">
-          <input type="text" id="token-input" placeholder="Enter Token (e.g., AERO-1234-XYZ)" required style="width: 100%; padding: 0.75rem; background: var(--bg-color, #121212); border: 1px solid var(--border-color, #333); color: var(--text-color, #fff); border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box;">
+          <input type="text" id="token-input" placeholder="Enter Token (e.g., AERO-1234-XYZ)" required style="width: 100%; padding: 0.75rem; background: #f9f9f9; border: 1px solid #ccc; color: #000; border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box;">
           <button type="submit" style="width: 100%; padding: 0.75rem; background: var(--accent-primary, #3b82f6); color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Access Dashboard</button>
         </form>
       </div>
 
       <div id="dashboard-view" style="display: none;">
-        <h3 id="status-title" style="color: var(--accent-primary, #60a5fa); margin-bottom: 0.5rem;"></h3>
-        <p id="status-desc" style="color: var(--text-muted, #aaa); font-size: 0.9rem; margin-bottom: 1.5rem;"></p>
-        <div style="background: var(--bg-color, #121212); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color, #333);">
-          <p style="color: var(--text-color, #fff);"><strong>Client:</strong> <span id="client-name"></span></p>
-          <p style="color: var(--text-color, #fff);"><strong>Current Milestone:</strong> <span id="milestone"></span></p>
-          <p style="color: var(--text-color, #fff);"><strong>Estimated Completion:</strong> <span id="completion"></span></p>
+        <h3 id="status-title" style="color: var(--accent-primary, #3b82f6); margin-bottom: 0.5rem;"></h3>
+        <p id="status-desc" style="color: #555; font-size: 0.9rem; margin-bottom: 1.5rem;"></p>
+        <div style="background: #f9f9f9; padding: 1rem; border-radius: 6px; border: 1px solid #ccc;">
+          <p style="color: #000;"><strong>Client:</strong> <span id="client-name"></span></p>
+          <p style="color: #000;"><strong>Current Milestone:</strong> <span id="milestone"></span></p>
+          <p style="color: #000;"><strong>Estimated Completion:</strong> <span id="completion"></span></p>
         </div>
       </div>
     </div>
   </main>
 
   <script>
+    fetch('navbar.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('navbar-container').innerHTML = data;
+      });
+
     document.getElementById('token-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const token = document.getElementById('token-input').value.trim();
