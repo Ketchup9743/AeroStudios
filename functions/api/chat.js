@@ -10,7 +10,7 @@ export async function onRequestPost(context) {
       });
     }
 
-    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${env.GEMINI_API_KEY}`, {
+    const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -19,7 +19,7 @@ export async function onRequestPost(context) {
     });
 
     const data = await geminiRes.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || JSON.stringify(data);
     
     return new Response(JSON.stringify({ reply }), {
       status: 200,
