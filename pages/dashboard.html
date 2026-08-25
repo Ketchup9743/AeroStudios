@@ -10,73 +10,53 @@
   <div id="navbar-container"></div>
 
   <main style="max-width: 500px; text-align: left; margin: 4rem auto; padding: 0 1rem;">
-    <div style="background: var(--card-bg); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color);">
+    <div style="background: var(--card-bg, #1e1e1e); padding: 2rem; border-radius: 12px; border: 1px solid var(--border-color, #333);">
       <h2 style="margin-bottom: 1rem; color: var(--text-color, #fff);">Client Portal Access</h2>
       
       <div id="login-section">
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Enter your access token sent to your email, or request a new one below.</p>
+        <p style="color: var(--text-muted, #aaa); margin-bottom: 1.5rem;">Enter your access token to view your project dashboard.</p>
         <form id="token-form">
-          <input type="text" id="token-input" placeholder="Enter Token (e.g., AERO-1234-XYZ)" required style="width: 100%; padding: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color, #fff); border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box;">
-          <button type="submit" style="width: 100%; padding: 0.75rem; background: var(--accent-primary); color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Access Dashboard</button>
+          <input type="text" id="token-input" placeholder="Enter Token (e.g., AERO-1234-XYZ)" required style="width: 100%; padding: 0.75rem; background: var(--bg-color, #121212); border: 1px solid var(--border-color, #333); color: var(--text-color, #fff); border-radius: 6px; margin-bottom: 1rem; box-sizing: border-box;">
+          <button type="submit" style="width: 100%; padding: 0.75rem; background: var(--accent-primary, #3b82f6); color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Access Dashboard</button>
         </form>
-        
-        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
-        
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">Don't have a token yet? Request one:</p>
-        <form id="request-form">
-          <input type="email" id="request-email" placeholder="Your Email Address" required style="width: 100%; padding: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-color, #fff); border-radius: 6px; margin-bottom: 0.75rem; box-sizing: border-box;">
-          <button type="submit" style="width: 100%; padding: 0.5rem; background: transparent; color: var(--accent-primary); border: 1px solid var(--accent-primary); border-radius: 6px; cursor: pointer;">Request Token via Email</button>
-        </form>
-        <p id="status-msg" style="margin-top: 1rem; font-size: 0.9rem; color: var(--accent-primary);"></p>
       </div>
 
       <div id="dashboard-view" style="display: none;">
-        <h3 style="color: var(--accent-primary, #60a5fa); margin-bottom: 0.5rem;">Project Status: Active Development</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Authenticated successfully via Token.</p>
-        <div style="background: var(--bg-color); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
-          <p style="color: var(--text-color, #fff);"><strong>Current Milestone:</strong> Backend API Integration</p>
-          <p style="color: var(--text-color, #fff);"><strong>Estimated Completion:</strong> On Schedule</p>
+        <h3 id="status-title" style="color: var(--accent-primary, #60a5fa); margin-bottom: 0.5rem;"></h3>
+        <p id="status-desc" style="color: var(--text-muted, #aaa); font-size: 0.9rem; margin-bottom: 1.5rem;"></p>
+        <div style="background: var(--bg-color, #121212); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color, #333);">
+          <p style="color: var(--text-color, #fff);"><strong>Client:</strong> <span id="client-name"></span></p>
+          <p style="color: var(--text-color, #fff);"><strong>Current Milestone:</strong> <span id="milestone"></span></p>
+          <p style="color: var(--text-color, #fff);"><strong>Estimated Completion:</strong> <span id="completion"></span></p>
         </div>
       </div>
     </div>
   </main>
 
   <script>
-    fetch('navbar.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('navbar-container').innerHTML = data;
-      });
-
-    document.getElementById('request-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('request-email').value;
-      const statusMsg = document.getElementById('status-msg');
-      
-      statusMsg.textContent = "Sending token...";
-
-      const res = await fetch('/api/request-token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        statusMsg.textContent = "Success! Check your Discord tokens channel for your access token.";
-      } else {
-        statusMsg.textContent = data.error || "Failed to send token.";
-      }
-    });
-
-    document.getElementById('token-form').addEventListener('submit', (e) => {
+    document.getElementById('token-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const token = document.getElementById('token-input').value.trim();
-      if (token.startsWith('AERO-')) {
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('dashboard-view').style.display = 'block';
-      } else {
-        alert('Invalid token format.');
+      
+      try {
+        const response = await fetch('../projects.json');
+        const projects = await response.json();
+        
+        if (projects[token]) {
+          const data = projects[token];
+          document.getElementById('client-name').textContent = data.clientName;
+          document.getElementById('milestone').textContent = data.milestone;
+          document.getElementById('completion').textContent = data.completion;
+          document.getElementById('status-title').textContent = data.statusTitle;
+          document.getElementById('status-desc').textContent = data.statusDesc;
+          
+          document.getElementById('login-section').style.display = 'none';
+          document.getElementById('dashboard-view').style.display = 'block';
+        } else {
+          alert('Invalid or unknown token.');
+        }
+      } catch (err) {
+        alert('Could not load project data.');
       }
     });
   </script>
